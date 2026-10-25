@@ -2,7 +2,7 @@ import type { Env } from "./env";
 
 // Which MCP clients may connect. Every client reaches the Rollout Links app through this Worker's single
 // OAuth client, so we only hand tokens to redirect URIs we expect: Claude's hosted callbacks (exact URIs, so no
-// other page on those hosts can receive a code) and, when enabled, loopback callbacks of local apps (Claude Code,
+// other page on those hosts can receive a code; ChatGPT uses its stable URI because we send RFC 9207 `iss`) and, when enabled, loopback callbacks of local apps (Claude Code,
 // MCP Inspector). The consent page warns about loopback ones.
 
 const LOOPBACK_HOSTS = new Set(["localhost", "127.0.0.1", "[::1]"]);
@@ -33,7 +33,7 @@ export function checkRegistration(env: Policy, metadata: Record<string, unknown>
   if (!Array.isArray(uris) || uris.length === 0 || !uris.every((u) => typeof u === "string" && isAllowedRedirect(env, u))) {
     return {
       code: "invalid_redirect_uri",
-      description: "This server only accepts Claude's own callback URIs and local loopback redirect URIs.",
+      description: "This server only accepts Claude's and ChatGPT's own callback URIs and local loopback redirect URIs.",
     };
   }
 }

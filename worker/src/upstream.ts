@@ -97,7 +97,7 @@ export async function refreshUpstream(env: Env, props: Props) {
   }
   if (!res.ok) {
     if (res.status === 400 || res.status === 401) {
-      // Disconnected on the Profile page, expired, or the account lost access: revoke this grant too.
+      // Disconnected on the MCP Settings page, expired, or the account lost access: revoke this grant too.
       throw new OAuthError("invalid_grant", { description: "Rollout Links access was revoked" });
     }
     throw new OAuthError("temporarily_unavailable", { description: "Rollout Links is unavailable", statusCode: 503 });

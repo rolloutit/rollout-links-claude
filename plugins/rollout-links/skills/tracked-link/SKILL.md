@@ -12,7 +12,7 @@ description: >-
 
 You work through the **Rollout Links** MCP connector (tools such as `create_tracked_link`,
 `list_slack_channels`, `get_link_stats`). If those tools are missing, tell the user to connect the connector
-first (Rollout Links → Profile page has the steps) and stop.
+first (Rollout Links → MCP Settings has the steps) and stop.
 
 Reply in the user's language (often Hungarian). Keep questions short.
 

@@ -134,10 +134,10 @@ async function callback(req: Request, env: Env): Promise<Response> {
 function home(env: Env): Response {
   return page(
     "Rollout Links MCP",
-    `<h1>Rollout Links for Claude</h1>
+    `<h1>Rollout Links MCP server</h1>
 <p>This is the MCP server of <a href="${escape(origin(env.LINKS_BASE_URL))}">Rollout Links</a>.</p>
 <p>Connector URL: <code>${escape(origin(env.PUBLIC_URL))}/mcp</code></p>
-<p class="muted">Setup instructions are on your Profile page in Rollout Links.</p>`,
+<p class="muted">Setup instructions for Claude and ChatGPT are on the MCP Settings page in Rollout Links.</p>`,
   );
 }
 

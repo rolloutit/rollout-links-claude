@@ -16,8 +16,9 @@
     "PUBLIC_URL": "https://rollout-links-mcp.rolloutit.workers.dev",
     "LINKS_BASE_URL": "https://link.rolloutit.net",
     "LINKS_CLIENT_ID": "rollout-links-mcp",
-    // Exact match. Claude.ai / Desktop / mobile use these; Claude Code uses a loopback callback.
-    "ALLOWED_REDIRECT_URIS": "https://claude.ai/api/mcp/auth_callback,https://claude.com/api/mcp/auth_callback",
+    // Exact match. Claude.ai / Desktop / mobile and ChatGPT (stable URI, used because we send RFC 9207 iss);
+    // Claude Code uses a loopback callback.
+    "ALLOWED_REDIRECT_URIS": "https://claude.ai/api/mcp/auth_callback,https://claude.com/api/mcp/auth_callback,https://chatgpt.com/connector_platform_oauth_redirect",
     "ALLOW_LOOPBACK_REDIRECTS": "true"
   }
   // Secrets (never in this file):

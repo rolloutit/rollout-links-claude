@@ -29,8 +29,8 @@ Links app on every API call; the Worker adds its own checks in front.
   (CIMD), and the redirect host, with a loopback warning.
 - The consent form and the upstream `state` are single-use and **bound to the browser** with `__Host-` cookies,
   so a consent page can't be forged and a callback can't be replayed in a victim's browser.
-- Redirect URIs are allow-listed at registration and at every authorization: Claude's exact callback URIs
-  (`ALLOWED_REDIRECT_URIS`, no other path on those hosts) and loopback (`localhost`/`127.0.0.1`, for Claude
+- Redirect URIs are allow-listed at registration and at every authorization: Claude's and ChatGPT's exact
+  callback URIs (`ALLOWED_REDIRECT_URIS`, no other path on those hosts) and loopback (`localhost`/`127.0.0.1`, for Claude
   Code; can be disabled with `ALLOW_LOOPBACK_REDIRECTS=false`).
 - The consent pages can't be framed (`frame-ancestors 'none'`, `X-Frame-Options: DENY`) and escape every
   client-supplied string.
@@ -47,9 +47,9 @@ Links app on every API call; the Worker adds its own checks in front.
 | Worker refresh token | KV (hashed), rotated | 30 days (absolute) |
 
 The 30-day cap means a person who left the company loses connector access within a month even if nobody
-revokes it; admins can disconnect anyone immediately on their Profile page (offboarding).
+revokes it; admins can disconnect anyone immediately on the MCP Settings page (offboarding).
 
-Revoking (Profile page → Disconnect, or the app's RFC 7009 endpoint) takes effect on the next request; the
+Revoking (MCP Settings → Disconnect, or the app's RFC 7009 endpoint) takes effect on the next request; the
 Worker's next refresh then fails with `invalid_grant` and revokes its own grant, so Claude must sign in again.
 
 ### Secrets

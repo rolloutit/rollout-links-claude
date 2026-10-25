@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import { checkRegistration, isAllowedOrigin, isAllowedRedirect } from "../src/policy";
 
 const env = {
-  ALLOWED_REDIRECT_URIS: "https://claude.ai/api/mcp/auth_callback,https://claude.com/api/mcp/auth_callback",
+  ALLOWED_REDIRECT_URIS:
+    "https://claude.ai/api/mcp/auth_callback,https://claude.com/api/mcp/auth_callback,https://chatgpt.com/connector_platform_oauth_redirect",
   ALLOW_LOOPBACK_REDIRECTS: "true",
   PUBLIC_URL: "https://rollout-links-mcp.example.workers.dev",
 };
@@ -12,6 +13,7 @@ describe("redirect URI policy", () => {
     for (const uri of [
       "https://claude.ai/api/mcp/auth_callback",
       "https://claude.com/api/mcp/auth_callback",
+      "https://chatgpt.com/connector_platform_oauth_redirect",
       "http://localhost:33418/callback",
       "http://127.0.0.1:6274/oauth/callback",
     ]) {
@@ -23,6 +25,7 @@ describe("redirect URI policy", () => {
     for (const uri of [
       "https://evil.test/cb",
       "https://claude.ai/some/other/page",
+      "https://chatgpt.com/connector/oauth/attacker",
       "https://claude.ai/api/mcp/auth_callback?next=https://evil.test",
       "https://claude.ai/api/mcp/auth_callback/",
       "https://claude.ai.evil.test/cb",

@@ -1,6 +1,6 @@
-# Rollout Links for Claude
+# Rollout Links for Claude (and ChatGPT)
 
-Talk to [Rollout Links](https://link.rolloutit.net) from Claude:
+Talk to [Rollout Links](https://link.rolloutit.net) from Claude or ChatGPT:
 
 > *"Készíts egy trackelhető linket erre a Drive deckre, és a #sales-signals channelen legyen követhető."*
 > *"Who opened my links this week? Group them by company."*
@@ -20,7 +20,7 @@ This repo contains:
 
 ## Connect (users)
 
-You need a Rollout Links account (@rolloutit.net Google sign-in). Your **Profile** page in Rollout Links shows the
+You need a Rollout Links account (@rolloutit.net Google sign-in). The **MCP Settings** page in Rollout Links shows the
 same steps with the right URL.
 
 **Claude.ai / Claude Desktop / mobile**
@@ -35,6 +35,11 @@ same steps with the right URL.
 /plugin install rollout-links@rollout-links
 ```
 Then `/mcp` → `rollout-links` → authenticate.
+
+**ChatGPT** (paid plan, Developer mode)
+1. Settings → Apps → Advanced settings → turn on **Developer mode**.
+2. Apps → **Create**: name `Rollout Links`, MCP server URL `https://<worker>/mcp`, Authentication **OAuth** → Create.
+3. Approve, sign in with Google, click **Allow**. ChatGPT has no skills; the server's `instructions` tell it what to ask.
 
 ## Tools
 
@@ -102,7 +107,7 @@ MCP_PLUGIN_REPO=rolloutit/rollout-links-claude
 published.
 
 **Kill switch:** removing `MCP_OAUTH_CLIENT_ID` from the app instantly rejects every connector token.
-Users can disconnect individually on their Profile page.
+Users can disconnect individually on the MCP Settings page (`/app/mcp`).
 
 ### Custom domain (optional)
 
