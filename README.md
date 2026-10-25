@@ -17,6 +17,7 @@ This repo contains:
 | [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) | **Claude Code plugin marketplace** |
 | [`plugins/rollout-links/`](plugins/rollout-links) | The plugin: connector config + skills |
 | [`plugins/rollout-links/skills/`](plugins/rollout-links/skills) | **Skills**: `tracked-link` (create/edit/analyse links), `link-contacts` (contact upload) |
+| [`kill-switch/`](kill-switch) | **Cost kill switch**: takes every Worker on the Cloudflare account offline above $100/month usage |
 
 ## Connect (users)
 
@@ -114,6 +115,61 @@ Users can disconnect individually on the MCP Settings page (`/app/mcp`).
 `workers.dev` works fine. For e.g. `mcp.rolloutit.net` the zone must be on Cloudflare; add a
 `routes: [{ "pattern": "mcp.rolloutit.net", "custom_domain": true }]` entry, set `workers_dev: false`, and run
 `set-server-url.sh` with the new URL (and update `MCP_OAUTH_REDIRECT_URIS` in the app).
+
+## Cost kill switch (admins)
+
+Nothing on the Cloudflare account may cost more than **$100/month**; above that, everything goes offline.
+
+- **Today the account is on Workers Free**, which has no overage billing: past the daily limits (100k requests,
+  KV 100k reads / 1k writes) requests just fail. The kill switch is insurance for the day the account moves to
+  Workers Paid.
+- **Budget alerts** (Manage Account → Billing → Billable Usage → Create budget alert) only exist on
+  Pay-as-you-go accounts, only send an email (about a day late) and never stop anything. On Paid, set one at $100
+  as a second signal.
+
+[`kill-switch/`](kill-switch) is a separate Worker, `cost-kill-switch`, with no public URL. Every hour it:
+
+1. reads month-to-date (UTC calendar month) Workers and KV usage for the whole account from GraphQL Analytics
+   (minutes behind, not a day);
+2. prices the usage above the Workers Paid allowances with the list prices in
+   [`kill-switch/src/cost.ts`](kill-switch/src/cost.ts): requests, CPU time, KV reads/writes/deletes/lists/storage,
+   and Workers Logs (estimated at one event per request). The $5 base fee is not counted;
+3. at or above `THRESHOLD_USD` (100), turns off `workers.dev` (and preview URLs) and removes the cron triggers of
+   **every other Worker** on the account, saves what it changed in KV and posts to Slack
+   (`SLACK_WEBHOOK_URL`, optional). It never touches code, secrets or data, so it is fully reversible. With
+   `DRY_RUN` not `"false"` it only logs and notifies, once a month.
+
+It does not cover products that are not in use (R2, D1, Durable Objects, Queues, Workers AI, custom domains/zone
+routes); if you adopt one, add its price to `cost.ts` and its off switch to `src/index.ts`. Workers Logs pricing
+changes on 2026-12-01: update `PRICES.logEvents` then.
+
+**Setup** (done for the rolloutit account; for another account):
+
+```bash
+cd kill-switch
+npm ci
+npx wrangler kv namespace create KILL_SWITCH_STATE   # paste the id into wrangler.jsonc, set ACCOUNT_ID there
+npx wrangler deploy
+npx wrangler secret put CF_API_TOKEN                 # see below
+npx wrangler secret put SLACK_WEBHOOK_URL            # optional
+```
+
+`CF_API_TOKEN`: Manage Account → Account API Tokens → Create Token → Custom token, permissions
+**Account · Workers Scripts · Edit** and **Account · Account Analytics · Read**, the account as the only resource,
+no expiry (an expired token silently disables the kill switch), no IP filter. Never commit it.
+
+**When it trips** (or to check):
+
+```bash
+cd kill-switch
+npm run restore -- --show   # what it switched off and when
+npm run restore             # switch everything back on; the kill switch stays quiet until the month ends
+npx wrangler tail           # watch the hourly runs (one JSON line with the cost breakdown each)
+```
+
+Fix the cause (or raise `THRESHOLD_USD`, or list a Worker in `EXCLUDE_SCRIPTS`) before the next month starts, or it
+will trip again. **Test** with `"THRESHOLD_USD": "0"`, `"DRY_RUN": "true"` and `"crons": ["* * * * *"]`, then
+`npx wrangler tail`; put the values back afterwards.
 
 ## Develop
 
