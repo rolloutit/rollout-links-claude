@@ -1,0 +1,10 @@
+{
+  "name": "rollout-links",
+  "description": "Create tracked links on link.rolloutit.net with Slack open notifications, see who opened them, and keep the shared contact list up to date — from Claude.",
+  "version": "1.0.0",
+  "author": { "name": "Rollout IT", "url": "https://rolloutit.net" },
+  "homepage": "https://link.rolloutit.net",
+  "repository": "https://github.com/rolloutit/rollout-links-claude",
+  "license": "MIT",
+  "keywords": ["linkedin", "outreach", "tracking", "slack", "linked-helper", "mcp"]
+}

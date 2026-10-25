@@ -1,0 +1,26 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "rollout-links-mcp",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  // nodejs_compat: MCP SDK. global_fetch_strictly_public: SSRF protection for Client ID Metadata Document fetches.
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "workers_dev": true,
+  "observability": { "enabled": true },
+  "kv_namespaces": [
+    // npx wrangler kv namespace create OAUTH_KV  → paste the id here
+    { "binding": "OAUTH_KV", "id": "REPLACE_WITH_KV_NAMESPACE_ID" }
+  ],
+  "vars": {
+    // Your Worker URL after the first deploy (https://rollout-links-mcp.<your-subdomain>.workers.dev) or a custom domain.
+    "PUBLIC_URL": "https://rollout-links-mcp.REPLACE_ME.workers.dev",
+    "LINKS_BASE_URL": "https://link.rolloutit.net",
+    "LINKS_CLIENT_ID": "rollout-links-mcp",
+    // Exact match. Claude.ai / Desktop / mobile use these; Claude Code uses a loopback callback.
+    "ALLOWED_REDIRECT_URIS": "https://claude.ai/api/mcp/auth_callback,https://claude.com/api/mcp/auth_callback",
+    "ALLOW_LOOPBACK_REDIRECTS": "true"
+  }
+  // Secrets (never in this file):
+  //   npx wrangler secret put LINKS_CLIENT_SECRET   (= MCP_OAUTH_CLIENT_SECRET in the Rollout Links app)
+  //   npx wrangler secret put CONSENT_SECRET        (openssl rand -hex 32)
+}

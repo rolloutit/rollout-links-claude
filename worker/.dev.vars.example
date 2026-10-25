@@ -1,0 +1,5 @@
+# Local `wrangler dev` only (copy to .dev.vars). Production secrets go in with `wrangler secret put`.
+PUBLIC_URL=http://localhost:8787
+LINKS_BASE_URL=http://localhost:3000
+LINKS_CLIENT_SECRET=same value as MCP_OAUTH_CLIENT_SECRET in the Rollout Links app
+CONSENT_SECRET=openssl rand -hex 32

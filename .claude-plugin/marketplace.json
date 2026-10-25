@@ -1,0 +1,13 @@
+{
+  "name": "rollout-links",
+  "owner": { "name": "Rollout IT", "url": "https://rolloutit.net" },
+  "description": "Rollout Links for Claude: create tracked LinkedIn outreach links with Slack open notifications, check who opened them, manage contacts.",
+  "plugins": [
+    {
+      "name": "rollout-links",
+      "source": "./plugins/rollout-links",
+      "description": "Rollout Links MCP connector (OAuth sign-in with your @rolloutit.net Google account) plus skills for creating tracked links and uploading contacts.",
+      "version": "1.0.0"
+    }
+  ]
+}
