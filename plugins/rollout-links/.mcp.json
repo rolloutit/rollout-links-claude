@@ -2,7 +2,7 @@
   "mcpServers": {
     "rollout-links": {
       "type": "http",
-      "url": "https://rollout-links-mcp.REPLACE_ME.workers.dev/mcp"
+      "url": "https://rollout-links-mcp.rolloutit.workers.dev/mcp"
     }
   }
 }

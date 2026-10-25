@@ -9,11 +9,11 @@
   "observability": { "enabled": true },
   "kv_namespaces": [
     // npx wrangler kv namespace create OAUTH_KV  → paste the id here
-    { "binding": "OAUTH_KV", "id": "REPLACE_WITH_KV_NAMESPACE_ID" }
+    { "binding": "OAUTH_KV", "id": "e6b65e8264e44295904f76619f3338fd" }
   ],
   "vars": {
     // Your Worker URL after the first deploy (https://rollout-links-mcp.<your-subdomain>.workers.dev) or a custom domain.
-    "PUBLIC_URL": "https://rollout-links-mcp.REPLACE_ME.workers.dev",
+    "PUBLIC_URL": "https://rollout-links-mcp.rolloutit.workers.dev",
     "LINKS_BASE_URL": "https://link.rolloutit.net",
     "LINKS_CLIENT_ID": "rollout-links-mcp",
     // Exact match. Claude.ai / Desktop / mobile use these; Claude Code uses a loopback callback.
