@@ -13,8 +13,13 @@ const config = readFileSync(new URL("../wrangler.jsonc", import.meta.url), "utf8
 const accountId = config.match(/"ACCOUNT_ID":\s*"([0-9a-f]+)"/)[1];
 const token = process.env.CLOUDFLARE_API_TOKEN || wrangler("auth", "token").split("\n").pop();
 
-const raw = wrangler("kv", "key", "get", "--binding", "STATE", "--remote", "state");
-const state = raw && raw !== "Value not found" ? JSON.parse(raw) : null;
+let raw = "";
+try {
+  raw = wrangler("kv", "key", "get", "--binding", "STATE", "--remote", "state");
+} catch {
+  // 404: the kill switch never saved anything (it only writes once it is over the threshold).
+}
+const state = raw ? JSON.parse(raw) : null;
 console.log(JSON.stringify(state, null, 2));
 if (process.argv.includes("--show")) process.exit(0);
 if (!state) {
